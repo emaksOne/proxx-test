@@ -54,6 +54,19 @@ class Board:
             j = index % self.size
             self.board[i][j].set_bh()
             self._update_adjacent(i, j)
- 
 
+
+    def _show(self):
+        print("--"*(self.size*2))
+        for line in self.board:
+            values = []
+            for cell in line:
+                if cell.is_bh():
+                    values.append("H")
+                    continue
+                values.append(str(cell.get_number_of_adjacent_bh()))
+            line_str = "| " + " | ".join(values) + " |"
+            print(line_str)
+            print("--"*(self.size*2))
+ 
     
