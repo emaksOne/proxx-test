@@ -6,15 +6,20 @@ from cell import Cell
 
 
 class Board:
-    def __init__(self, size: int):
+    def __init__(self, size: int, k: int, seed=Union[int, None]):
         """Init Board instance
 
         Args:
             size (int): size of the board
+            k (int): number of black holes
+            seed (Union[int, None], optional): seed for random. Defaults to None.
         """
         self.size = size
+        self.k = k
         # create (size x size) matrix of cells
         self.board = [[Cell() for _ in range(size)] for _ in range(size)]
+        # populate with black holes
+        self._populate(k, seed)
 
     def _update_adjacent(self, bh_i: int, bh_j: int):
         """Helper method to update adjacent cells with +1
@@ -29,7 +34,7 @@ class Board:
                     continue
                 self.board[i][j].increase_number_of_adjacent_bh()
 
-    def populate(self, k: int, seed: Union[int, None] = None):
+    def _populate(self, k: int, seed: Union[int, None] = None):
         """Populate board with K black holes
 
         Args:
@@ -125,7 +130,8 @@ class Board:
                 if cell.is_bh():
                     values.append("H")
                     continue
-                values.append(str(cell.get_number_of_adjacent_bh()))
+                val = cell.get_number_of_adjacent_bh()
+                values.append(str(val) if val > 0 else " ")
             line_str = "| " + " | ".join(values) + " |"
             print(line_str)
             print("--" * (self.size * 2))
